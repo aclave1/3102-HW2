@@ -16,6 +16,11 @@ public class Trie_Util {
 		lt.insertString("csc");
 		lt.insertString("computer");
 		boolean contains = lt.tSearch("alex");
+		boolean notcontains = lt.tSearch("kittens");
+		boolean jschk= lt.tSearch("ale");
+
 		System.out.println(contains);
+		System.out.println(jschk);
+		
 	}
 }
