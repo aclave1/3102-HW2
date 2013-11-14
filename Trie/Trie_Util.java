@@ -20,7 +20,7 @@ public class Trie_Util {
 		boolean jschk= lt.tSearch("ale");
 
 		System.out.println(contains);
-		System.out.println(jschk);
+		System.out.println(notcontains);
 		
 	}
 }
