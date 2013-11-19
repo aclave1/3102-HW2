@@ -8,6 +8,7 @@ public class ListTrie {
 		char lead;
 		String label;
 		List<Node> children;
+		boolean isWord;
 
 		public Node() {
 			children = new LinkedList<Node>();
@@ -39,9 +40,12 @@ public class ListTrie {
 
 	/**
 	 * 
-	 * @param key: The character we're looking for
-	 * @param node the node whose children we're searching
-	 * @return null if the node does not have the child, a reference to the child if it does.
+	 * @param key
+	 *            : The character we're looking for
+	 * @param node
+	 *            the node whose children we're searching
+	 * @return null if the node does not have the child, a reference to the
+	 *         child if it does.
 	 */
 	public Node lSearch(char key, Node node) {
 		for (Node child : node.children) {
@@ -52,22 +56,26 @@ public class ListTrie {
 		return null;
 	}
 
+	// search the trie for a string
 	public boolean tSearch(String s) {
 		char[] chars = s.toCharArray();
 		Node n = root;
 		for (int i = 0; i < chars.length; i++) {
 			if (this.lSearch(chars[i], n) == null) {
+				System.out.printf("\"%s\" is not in the trie\n",s);
 				return false;
 			} else {
-				if (i == chars.length - 1) {
-					return true;
+				if (i != chars.length) {
+					n = this.lSearch(chars[i], n);
 				}
-
-				n = this.lSearch(chars[i], n);
 			}
 		}
-		System.out.println("Shouldn't be reached");
-		return false;
+		if (n.isWord == true) {
+			System.out.printf("%s is in the trie\n",s);
+			return true;
+		} else
+			System.out.printf("%s is a prefix\n",s);
+			return false;
 	}
 
 	public void insertString(String s) {
@@ -81,10 +89,10 @@ public class ListTrie {
 				n = this.lSearch(chars[i], n);
 			}
 		}
+		n.isWord = true;
 	}
 
 	public void insertChar(char c, Node n) {
-
 		for (Node child : n.children) {
 			if (child.lead == c) {
 				return;
