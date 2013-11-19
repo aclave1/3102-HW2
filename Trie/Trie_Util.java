@@ -22,6 +22,8 @@ public class Trie_Util {
 		System.out.println(contains);
 		System.out.println(notcontains);
 		System.out.println(pref);
+		int diff = ListTrie.diffIndex("roch", "richardson");
+		System.out.println(diff);
 		
 	}
 }
