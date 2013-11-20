@@ -11,7 +11,7 @@ public class ListTrie {
 		boolean isWord;
 
 		public Node() {
-			label = "";
+			label = " ";
 			children = new LinkedList<Node>();
 		}
 
@@ -24,12 +24,13 @@ public class ListTrie {
 		public Node(char c, String s) {
 			lead = c;
 			label = s;
+			children = new LinkedList<Node>();
 		}
 
 		@Override
 		public String toString() {
 
-			return new String("" + lead);
+			return new String("" + lead + " label:" + label);
 
 		}
 	}
@@ -100,38 +101,42 @@ public class ListTrie {
 	}
 
 	// call this to insert a string onto a node
+	//the algorithm is upside down. 
 	public void insertString(String s, Node n) {
 		
 		int diff = diffIndex(n.label, s);
-		//either it was called on the root, or their first letters are different. 
-		if (diff == 0) 
-		{
-			Node child = new Node(s.charAt(0), s);
-			n.children.add(child);
-		} 
-		
-		//their first letters are the same
+		// either it was called on the root, or their first letters are
+		// different.
+		if (diff == 0) {
+			Node candidate = lSearch(s.charAt(0), n);
+			if (candidate != null) {
+				insertString(s, candidate);
+			} else {
+				Node child = new Node(s.charAt(0), s);
+
+				n.children.add(child);
+			}
+		}
+		//this is useless
+		// their first letters are the same
 		else if (diff == 1) {
-			for (Node child : n.children) 
-			{
-				if (diff != 0) 
-				{
+			for (Node child : n.children) {
+				if (diffIndex(child.label,s) != 0) {
 					insertString(s.substring(diff), child);
 				}
 			}
-			n.children.add(new Node(s.charAt(0), s));
-		} 
-		//they share a prefix but they differ before the end of the label.  
-		else if (diff > 1) 
-		{
-			//do stuff
-			insertString(s.substring(diff));
-		} 
-		//the label is a prefix to the inserted string, and can be happily inserted!
-		else if(diff == n.label.toCharArray().length){
-			//do stuff
+			n.children.add(new Node(s.charAt(diff), s));
 		}
-		else
+		// they share a prefix but they differ before the end of the label.
+		else if (diff > 1) {
+			// do stuff
+			insertString(s.substring(diff));
+		}
+		// the label is a prefix to the inserted string, and can be happily
+		// inserted!
+		else if (diff == n.label.toCharArray().length) {
+			// do stuff
+		} else
 			System.out.println("Something bad happened :(");
 	}
 

@@ -3,6 +3,9 @@ public class Trie_Util {
 	public static void main(String[] args) {
 		ListTrie lt = new ListTrie();
 		lt.insertString("test");
+		lt.insertString("task");
+		lt.insertString("tassle");
+		
 		lt.insertString("alex");
 		lt.insertString("kelsey");
 		lt.insertString("eclipse");
@@ -15,13 +18,7 @@ public class Trie_Util {
 		lt.insertString("gcc");
 		lt.insertString("csc");
 		lt.insertString("computer");
-		boolean contains = lt.tSearch("alex");
-		boolean notcontains = lt.tSearch("kittens");
-		boolean pref= lt.tSearch("ale");
-
-		System.out.println(contains);
-		System.out.println(notcontains);
-		System.out.println(pref);
+		
 		int diff = ListTrie.diffIndex("roch", "richardson");
 		System.out.println(diff);
 		
