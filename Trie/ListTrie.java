@@ -101,42 +101,51 @@ public class ListTrie {
 	}
 
 	// call this to insert a string onto a node
-	//the algorithm is upside down. 
+	// the algorithm is upside down.
 	public void insertString(String s, Node n) {
-		
 		int diff = diffIndex(n.label, s);
-		// either it was called on the root, or their first letters are
-		// different.
+
 		if (diff == 0) {
 			Node candidate = lSearch(s.charAt(0), n);
 			if (candidate != null) {
 				insertString(s, candidate);
 			} else {
 				Node child = new Node(s.charAt(0), s);
-
 				n.children.add(child);
 			}
 		}
-		//this is useless
+
+		// the label is a prefix to the inserted string, and can be happily
+		// inserted!
+		else if (diff == n.label.length()) {
+			// do stuff
+			System.out.println("prefix");
+		}
+		// they share a prefix but they differ before the end of the label.
+		else if (diff > 1 && diff < n.label.length()) {
+			// do stuff
+			String temp = n.label;
+			n.label = n.label.substring(0,diff);//this needs to be backwards, we're turning the label into a subtstring when we need a prefix ending at diff
+			insertString(temp.substring(diff),n);
+			insertString(s.substring(diff),n);
+			
+		}
+		// either it was called on the root, or their first letters are
+		// different.
+
+		// this is useless
 		// their first letters are the same
 		else if (diff == 1) {
 			for (Node child : n.children) {
-				if (diffIndex(child.label,s) != 0) {
+				if (diffIndex(child.label, s.substring(diff)) != 0) {
 					insertString(s.substring(diff), child);
 				}
 			}
-			n.children.add(new Node(s.charAt(diff), s));
+			Node child = new Node(s.charAt(diff),s.substring(diff));
+			n.children.add(child);
 		}
-		// they share a prefix but they differ before the end of the label.
-		else if (diff > 1) {
-			// do stuff
-			insertString(s.substring(diff));
-		}
-		// the label is a prefix to the inserted string, and can be happily
-		// inserted!
-		else if (diff == n.label.toCharArray().length) {
-			// do stuff
-		} else
+
+		else
 			System.out.println("Something bad happened :(");
 	}
 
@@ -171,6 +180,21 @@ public class ListTrie {
 		}
 		return l.length - 1;
 
+	}
+
+	public void preorder(Node e, String pref) {
+		if (e == null) {
+			return;
+		} else
+			pref = pref + e.label;
+
+		if (e.isWord) {
+			System.out.println(pref);
+		}
+
+		for (Node child : e.children) {
+			preorder(child, pref);
+		}
 	}
 
 }

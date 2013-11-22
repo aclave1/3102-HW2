@@ -19,6 +19,8 @@ public class Trie_Util {
 		lt.insertString("csc");
 		lt.insertString("computer");
 		
+		
+		
 		int diff = ListTrie.diffIndex("roch", "richardson");
 		System.out.println(diff);
 		
