@@ -11,13 +11,13 @@ public class ListTrie {
 		boolean isWord;
 
 		public Node() {
-			label = " ";
+			label = "";
 			children = new LinkedList<Node>();
 		}
 
 		public Node(char l) {
 			lead = l;
-			label = " ";
+			label = "";
 			children = new LinkedList<Node>();
 		}
 
@@ -104,7 +104,9 @@ public class ListTrie {
 	// the algorithm is upside down.
 	public void insertString(String s, Node n) {
 		int diff = diffIndex(n.label, s);
-
+		
+		// either it was called on the root, or their first letters are
+		// different.
 		if (diff == 0) {
 			Node candidate = lSearch(s.charAt(0), n);
 			if (candidate != null) {
@@ -119,7 +121,9 @@ public class ListTrie {
 		// inserted!
 		else if (diff == n.label.length()) {
 			// do stuff
-			System.out.println("prefix");
+	
+			n.children.add(new Node(s.charAt(0),s));
+			
 		}
 		// they share a prefix but they differ before the end of the label.
 		else if (diff > 1 && diff < n.label.length()) {
@@ -130,11 +134,7 @@ public class ListTrie {
 			insertString(s.substring(diff),n);
 			
 		}
-		// either it was called on the root, or their first letters are
-		// different.
 
-		// this is useless
-		// their first letters are the same
 		else if (diff == 1) {
 			for (Node child : n.children) {
 				if (diffIndex(child.label, s.substring(diff)) != 0) {
@@ -173,12 +173,12 @@ public class ListTrie {
 		char[] in = instring.toCharArray();
 		int i = 0;
 
-		for (; i < l.length - 1; i++) {
+		for (;i<l.length-1; i++) {
 			if (l[i] != in[i]) {
 				return i;
 			}
 		}
-		return l.length - 1;
+		return l.length ;
 
 	}
 
