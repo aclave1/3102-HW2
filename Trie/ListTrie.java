@@ -11,13 +11,13 @@ public class ListTrie {
 		boolean isWord;
 
 		public Node() {
-			label = "";
+			label = null;
 			children = new LinkedList<Node>();
 		}
 
 		public Node(char l) {
 			lead = l;
-			label = "";
+			label = " ";
 			children = new LinkedList<Node>();
 		}
 
@@ -103,11 +103,15 @@ public class ListTrie {
 	// call this to insert a string onto a node
 	// the algorithm is upside down.
 	public void insertString(String s, Node n) {
-		int diff = diffIndex(n.label, s);
+		int diff;
+		if(n.label == null){
+			diff =0;
 		
-		// either it was called on the root, or their first letters are
-		// different.
-		if (diff == 0) {
+		}
+		else{
+			diff = diffIndex(n.label, s);
+		}
+			if (diff == 0) {
 			Node candidate = lSearch(s.charAt(0), n);
 			if (candidate != null) {
 				insertString(s, candidate);
@@ -121,20 +125,24 @@ public class ListTrie {
 		// inserted!
 		else if (diff == n.label.length()) {
 			// do stuff
-	
-			n.children.add(new Node(s.charAt(0),s));
-			
+			//System.out.println("prefix");
+			n.children.add(new Node(s.charAt(0),s.substring(diff)));
 		}
 		// they share a prefix but they differ before the end of the label.
-		else if (diff > 1 && diff < n.label.length()) {
+		else if (diff > 0 && diff < n.label.length()) {
 			// do stuff
 			String temp = n.label;
-			n.label = n.label.substring(0,diff);//this needs to be backwards, we're turning the label into a subtstring when we need a prefix ending at diff
+			n.label = n.label.substring(0,diff);
+			//n.children.add(new Node(temp.charAt(0),temp.substring(diff))); 
 			insertString(temp.substring(diff),n);
 			insertString(s.substring(diff),n);
 			
 		}
+		// either it was called on the root, or their first letters are
+		// different.
 
+		// this is useless
+		// their first letters are the same
 		else if (diff == 1) {
 			for (Node child : n.children) {
 				if (diffIndex(child.label, s.substring(diff)) != 0) {
@@ -173,12 +181,12 @@ public class ListTrie {
 		char[] in = instring.toCharArray();
 		int i = 0;
 
-		for (;i<l.length-1; i++) {
+		for (; i < l.length ; i++) {
 			if (l[i] != in[i]) {
 				return i;
 			}
 		}
-		return l.length ;
+		return i;
 
 	}
 

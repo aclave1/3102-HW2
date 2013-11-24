@@ -13,19 +13,16 @@ public class HW_Util {
 		String filepath = "Trie/in.txt";
 		HW_Util util = new HW_Util();
 		ListTrie lt = new ListTrie();
-		int diff = lt.diffIndex("aa", "aa");
-		
-		
-		
+
 		util.loadfile(filepath);
 		
 		int lines = 0;
-		
 		for (String s : util.input) {
+			System.out.println(lines);
 			lt.insertString(s);
 			lines++;
 		}
-		System.out.printf("\nFile loaded. \n %d words added",lines);
+		System.out.printf("\n%d words added",lines);
 		
 
 	}
