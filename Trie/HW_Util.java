@@ -18,12 +18,12 @@ public class HW_Util {
 		
 		int lines = 0;
 		for (String s : util.input) {
-			System.out.println(lines);
+			//System.out.println(lines);
 			lt.insertString(s);
 			lines++;
 		}
+		System.out.println(lt.searchTrie(lt.root, "aa"));
 		System.out.printf("\n%d words added",lines);
-		
 
 	}
 
