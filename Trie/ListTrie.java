@@ -134,7 +134,7 @@ public class ListTrie {
 			String temp = n.label;
 			n.label = n.label.substring(0,diff);
 			//n.children.add(new Node(temp.charAt(0),temp.substring(diff))); 
-			insertString(temp.substring(diff),n);
+			insertString(temp.substring(diff-1),n);
 			insertString(s.substring(diff),n);
 			
 		}
@@ -180,8 +180,11 @@ public class ListTrie {
 		char[] l = label.toCharArray();
 		char[] in = instring.toCharArray();
 		int i = 0;
-
-		for (; i < l.length ; i++) {
+		System.out.printf("l=%s in=%s",label,instring);
+		for (; i < l.length && i < in.length; i++) {
+			if(i==l.length || i == in.length){
+				return i;
+			}
 			if (l[i] != in[i]) {
 				return i;
 			}
