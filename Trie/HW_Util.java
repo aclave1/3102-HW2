@@ -10,20 +10,19 @@ public class HW_Util {
 
 	public static void main(String[] args) {
 		// SUPPLY A FILEPATH TO THE INPUT ON THE COMMAND LINE!!!!!
-		String filepath = "Trie/in.txt";
 		HW_Util util = new HW_Util();
 		ListTrie lt = new ListTrie();
 
-		util.loadfile(filepath);
+		util.loadfile(args[0]);
 		
 		int lines = 0;
 		for (String s : util.input) {
-			System.out.println(lines);
+			//System.out.println(lines);
 			lt.insertString(s);
 			lines++;
 		}
+		lt.searchTrie(lt.root, "aa");
 		System.out.printf("\n%d words added",lines);
-		
 
 	}
 
@@ -46,7 +45,7 @@ public class HW_Util {
 			System.out.println("File successfully loaded " + count );
 			return true;
 		} else
-			// System.out.println("File load unsuccessfull. ");
+			System.out.println("File load unsuccessfull. ");
 			return false;
 	}
 }

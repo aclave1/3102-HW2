@@ -5,33 +5,22 @@ public class ListTrie {
 	Node root;
 
 	public class Node {
-		char lead;
 		String label;
 		List<Node> children;
-		boolean isWord;
 
 		public Node() {
 			label = null;
 			children = new LinkedList<Node>();
 		}
 
-		public Node(char l) {
-			lead = l;
-			label = " ";
-			children = new LinkedList<Node>();
-		}
-
-		public Node(char c, String s) {
-			lead = c;
+		public Node(String s) {
 			label = s;
 			children = new LinkedList<Node>();
 		}
 
 		@Override
 		public String toString() {
-
-			return new String("" + lead + " label:" + label);
-
+			return label;
 		}
 	}
 
@@ -49,51 +38,37 @@ public class ListTrie {
 	 * @return null if the node does not have the child, a reference to the
 	 *         child if it does.
 	 */
-	public Node lSearch(char key, Node node) {
+	public Node lSearch(Node node, String key) {
 		for (Node child : node.children) {
-			if (child.lead == key) {
+			int diff = diffIndex(child.label, key);
+			if (diff != 0) {
 				return child;
 			}
 		}
 		return null;
 	}
 
-	// search the trie for a string
-	public boolean tSearch(String s) {
-		char[] chars = s.toCharArray();
-		Node n = root;
-		for (int i = 0; i < chars.length; i++) {
-			if (this.lSearch(chars[i], n) == null) {
-				System.out.printf("\"%s\" is not in the trie\n", s);
-				return false;
-			} else {
-				if (i != chars.length) {
-					n = this.lSearch(chars[i], n);
-				}
-			}
+	public boolean searchTrie(Node n, String s) {
+		if(n.label == null){
+			Node candidate = lSearch(n, s);
+			return searchTrie(candidate,s);
 		}
-		if (n.isWord == true) {
-			System.out.printf("%s is in the trie\n", s);
-			return true;
-		} else
-			System.out.printf("%s is a prefix\n", s);
-		return false;
+		else{
+			int diff = diffIndex(n.label, s);
+			if(diff > n.label.length() || diff > s.length()){
+				return false;
+			}
+			else if(diff == n.label.length() && diff == s.length()){
+				return true;
+			}
+			else if(diff == n.label.length() && diff < s.length()){
+				Node candidate = lSearch(n, s.substring(diff));
+				return searchTrie(candidate,s.substring(diff));
+			}
+			
+		}
+		return true;
 	}
-
-	// noncompact
-	// public void insertString(String s) {
-	// char[] chars = s.toCharArray();
-	// Node n = root;
-	// for (int i = 0; i < chars.length; i++) {
-	// if (this.lSearch(chars[i], n) == null) {
-	// this.insertChar(chars[i], n);
-	// n = this.lSearch(chars[i], n);
-	// } else {
-	// n = this.lSearch(chars[i], n);
-	// }
-	// }
-	// n.isWord = true;
-	// }
 
 	// call this to insert onto the trie
 	public void insertString(String s) {
@@ -104,67 +79,49 @@ public class ListTrie {
 	// the algorithm is upside down.
 	public void insertString(String s, Node n) {
 		int diff;
-		if(n.label == null){
-			diff =0;
-		
-		}
-		else{
-			diff = diffIndex(n.label, s);
-		}
-			if (diff == 0) {
-			Node candidate = lSearch(s.charAt(0), n);
-			if (candidate != null) {
-				insertString(s, candidate);
-			} else {
-				Node child = new Node(s.charAt(0), s);
-				n.children.add(child);
-			}
-		}
+		if (n.label == null) {
+			diff = 0;
 
-		// the label is a prefix to the inserted string, and can be happily
-		// inserted!
-		else if (diff == n.label.length()) {
-			// do stuff
-			//System.out.println("prefix");
-			n.children.add(new Node(s.charAt(0),s.substring(diff)));
-		}
-		// they share a prefix but they differ before the end of the label.
-		else if (diff > 0 && diff < n.label.length()) {
-			// do stuff
-			String temp = n.label;
-			n.label = n.label.substring(0,diff);
-			//n.children.add(new Node(temp.charAt(0),temp.substring(diff))); 
-			insertString(temp.substring(diff-1),n);
-			insertString(s.substring(diff),n);
-			
+		} else {
+			diff = diffIndex(n.label, s);
 		}
 		// either it was called on the root, or their first letters are
 		// different.
-
-		// this is useless
-		// their first letters are the same
-		else if (diff == 1) {
+		if (diff == 0) {
+			Node candidate = lSearch(n, s.substring(0, 1));
+			if (candidate != null) {
+				insertString(s, candidate);
+			} else {
+				Node child = new Node(s);
+				n.children.add(child);
+				child.children.add(new Node("$"));
+			}
+		}
+		// the label is a prefix to the inserted string
+		else if (diff == n.label.length()) {
 			for (Node child : n.children) {
-				if (diffIndex(child.label, s.substring(diff)) != 0) {
+				int childdiff = diffIndex(child.label, s.substring(diff));
+				if (childdiff > 0) {
 					insertString(s.substring(diff), child);
+					// child.children.add(new Node("$"));
+					return;
 				}
 			}
-			Node child = new Node(s.charAt(diff),s.substring(diff));
+			Node child = new Node(s.substring(diff));
 			n.children.add(child);
 		}
-
+		// they share a prefix but they differ before the end of the label.
+		else if (diff > 0 && diff < n.label.length()) {
+			String temp = n.label;
+			n.label = n.label.substring(0, diff);
+			Node child = new Node(temp.substring(diff));
+			child.children = n.children;
+			n.children = new LinkedList<Node>();
+			n.children.add(child);
+			insertString(s.substring(diff - 1), n);
+		}
 		else
 			System.out.println("Something bad happened :(");
-	}
-
-	public void insertChar(char c, Node n) {
-		for (Node child : n.children) {
-			if (child.lead == c) {
-				return;
-			}
-		}
-		n.children.add(new Node(c));
-
 	}
 
 	/**
@@ -180,9 +137,9 @@ public class ListTrie {
 		char[] l = label.toCharArray();
 		char[] in = instring.toCharArray();
 		int i = 0;
-		System.out.printf("l=%s in=%s",label,instring);
+		// System.out.printf("l=%s in=%s \n",label,instring);
 		for (; i < l.length && i < in.length; i++) {
-			if(i==l.length || i == in.length){
+			if (i == l.length || i == in.length) {
 				return i;
 			}
 			if (l[i] != in[i]) {
@@ -193,19 +150,8 @@ public class ListTrie {
 
 	}
 
-	public void preorder(Node e, String pref) {
-		if (e == null) {
-			return;
-		} else
-			pref = pref + e.label;
+	public void preorder(Node p, String pref) {
 
-		if (e.isWord) {
-			System.out.println(pref);
-		}
-
-		for (Node child : e.children) {
-			preorder(child, pref);
-		}
 	}
 
 }
