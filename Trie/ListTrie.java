@@ -49,25 +49,25 @@ public class ListTrie {
 	}
 
 	public boolean searchTrie(Node n, String s) {
-		if (n.label == null) {
-			Node child = lSearch(n, s);
-			if (child != null) {
-				searchTrie(child, s);
-			}
-		} else {
-			Node child = lSearch(n, s);
-			if (child != null) {
-				int diff = diffIndex(child.label, s);
-				if (diff == child.label.length()) {
-					searchTrie(child, s.substring(diff));
-				} else
-					return false;
-			}
-			else
-				return true;
+		if(n.label == null){
+			Node candidate = lSearch(n, s);
+			return searchTrie(candidate,s);
 		}
-		System.out.println("something went haywire");
-		 return true;
+		else{
+			int diff = diffIndex(n.label, s);
+			if(diff > n.label.length() || diff > s.length()){
+				return false;
+			}
+			else if(diff == n.label.length() && diff == s.length()){
+				return true;
+			}
+			else if(diff == n.label.length() && diff < s.length()){
+				Node candidate = lSearch(n, s.substring(diff));
+				return searchTrie(candidate,s.substring(diff));
+			}
+			
+		}
+		return true;
 	}
 
 	// call this to insert onto the trie
@@ -120,19 +120,6 @@ public class ListTrie {
 			n.children.add(child);
 			insertString(s.substring(diff - 1), n);
 		}
-
-		// this is useless
-		// their first letters are the same
-		else if (diff == 1) {
-			for (Node child : n.children) {
-				if (diffIndex(child.label, s.substring(diff)) != 0) {
-					insertString(s.substring(diff), child);
-				}
-			}
-			Node child = new Node(s.substring(diff));
-			n.children.add(child);
-		}
-
 		else
 			System.out.println("Something bad happened :(");
 	}
