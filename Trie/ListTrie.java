@@ -49,25 +49,26 @@ public class ListTrie {
 	}
 
 	public boolean searchTrie(Node n, String s) {
+		boolean retval = false;
 		if(n.label == null){
 			Node candidate = lSearch(n, s);
-			return searchTrie(candidate,s);
+			retval = searchTrie(candidate,s);
 		}
 		else{
 			int diff = diffIndex(n.label, s);
 			if(diff > n.label.length() || diff > s.length()){
-				return false;
+				retval = false;
 			}
 			else if(diff == n.label.length() && diff == s.length()){
-				return true;
+				retval =  true;
 			}
 			else if(diff == n.label.length() && diff < s.length()){
 				Node candidate = lSearch(n, s.substring(diff));
-				return searchTrie(candidate,s.substring(diff));
+				retval = searchTrie(candidate,s.substring(diff));
 			}
 			
 		}
-		return true;
+		return retval;
 	}
 
 	// call this to insert onto the trie

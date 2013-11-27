@@ -21,7 +21,7 @@ public class HW_Util {
 			lt.insertString(s);
 			lines++;
 		}
-		lt.searchTrie(lt.root, "aa");
+		System.out.println(lt.searchTrie(lt.root, "applegi"));
 		System.out.printf("\n%d words added",lines);
 
 	}
