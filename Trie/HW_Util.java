@@ -18,12 +18,12 @@ public class HW_Util {
 		int lines = 0;
 		for (String s : util.input) {
 			//System.out.println(lines);
-			//lt.insertString(s);
+			lt.insertString(s);
 			ht.insertString(s);
 			lines++;
 		}
-		//ht.hashify(ht.root);
-		//System.out.println(ht.search(ht.root, "apple"));
+		ht.hashify(ht.root);
+		System.out.println(ht.search(ht.root, "apple"));
 		
 		System.out.println(lt.search(lt.root,"apple"));
 		

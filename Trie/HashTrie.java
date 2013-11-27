@@ -64,19 +64,28 @@ public class HashTrie extends ListTrie {
 
 	}
 	public boolean search(Node n,String s) {
+		boolean retval = false;
 		if(n.parent == n){
 			Node child = findChild(n,s.charAt(0));
-			search(child,s);
+			retval = search(child,s);
 		}else{
 			int diff = diffIndex(n.label,s);
-			
-			Node child = findChild(n,s.charAt(diff));
-			diff = diffIndex(child.label, s.substring(diff));
-			search(child,s.substring(diff));
+			if (diff > n.label.length() || diff > s.length()|| diff < n.label.length()) {
+				retval = false;
+			} else if (diff == n.label.length() && diff == s.length()) {
+				retval = true;
+			} else if (diff == n.label.length() && diff < s.length()) {
+				Node child = findChild(n,s.charAt(diff));
+				if(child != null){
+					diff = diffIndex(child.label, s.substring(diff));
+					retval = search(child,s.substring(diff));
+				} else{
+					return false;
+				}
+			}
 
 		}
-
-		return false;
+		return retval;
 	}
 	
 	public Node findChild(Node parent, char c) {

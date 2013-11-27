@@ -4,6 +4,7 @@ public class Node {
 		String label;
 		List<Node> children;
 		Node parent;
+		boolean isWord;
 
 		public Node() {
 			label = "$";
@@ -13,11 +14,13 @@ public class Node {
 		public Node(String s) {
 			label = s;
 			children = new LinkedList<Node>();
+			isWord = false;
 		}
 		public Node(Node p, String s){
 			label = s;
 			children = new LinkedList<Node>();
 			parent = p;
+			isWord = false;
 		}
 		
 		@Override

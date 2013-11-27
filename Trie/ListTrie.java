@@ -3,6 +3,7 @@ import java.util.List;
 
 public class ListTrie {
 	Node root;
+	
 
 	public ListTrie() {
 		root = new Node();
@@ -42,10 +43,10 @@ public class ListTrie {
 			retval = search(candidate, s);
 		} else {
 			int diff = diffIndex(n.label, s);
-			if (diff > n.label.length() || diff > s.length()
-					|| diff < n.label.length()) {
+			if (diff > n.label.length() || diff > s.length()|| diff < n.label.length()) {
 				retval = false;
 			} else if (diff == n.label.length() && diff == s.length()) {
+				
 				retval = true;
 			} else if (diff == n.label.length() && diff < s.length()) {
 				Node candidate = lSearch(n, s.substring(diff));
@@ -83,7 +84,7 @@ public class ListTrie {
 				Node child = new Node(s);
 				child.parent = n;
 				n.children.add(child);
-				// child.children.add(new Node("$"));
+				child.isWord = true;
 			}
 		}
 		// the label is a prefix to the inserted string
@@ -92,17 +93,11 @@ public class ListTrie {
 			if (candidate != null) {
 				insertString(s.substring(diff), candidate);
 			}
-			// for (Node child : n.children) {
-			// int childdiff = diffIndex(child.label, s.substring(diff));
-			// if (childdiff > 0) {// they share a prefix
-			// insertString(s.substring(diff), child);
-			// return;
-			// }
-			// }
 			else {
 				Node child = new Node(s.substring(diff)); //needs to be diff -1 sometimes
 				child.parent = n;
 				n.children.add(child);
+				child.isWord = true;
 			}
 		}
 		// they share a prefix but they differ before the end of the label.
@@ -115,9 +110,14 @@ public class ListTrie {
 			n.children = new LinkedList<Node>();
 			n.children.add(child);
 			if (diff < s.length()) {
-				n.children.add(new Node(s.substring(diff)));
+				Node word = new Node(s.substring(diff));
+				word.isWord = true;
+				n.children.add(word);
+				
 			} else {
-				n.children.add(new Node(s.substring(diff-1)));
+				Node word = new Node(s.substring(diff));
+				word.isWord = true;
+				n.children.add(word);
 			}
 		} else
 			System.out.println("Something bad happened :(");
