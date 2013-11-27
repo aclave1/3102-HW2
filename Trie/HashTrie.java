@@ -32,7 +32,10 @@ public class HashTrie extends ListTrie {
 	}
 
 	public int hash(Node parent, char c) {
-		return (Math.abs(parent.hashCode() + (int) c) % table.length);
+		int a = table.length/3;
+		int i = (int) parent.label.charAt(0);
+		int j = (int)c;		
+		return ((a * i +j) % table.length);
 	}
 
 	public void hashInsert(Node p, char c,Node q) {
@@ -50,10 +53,12 @@ public class HashTrie extends ListTrie {
 			for (Node child : n.children) {
 				hashify(child);
 			}
-		} else{
-			hashInsert(n.parent, n.label.charAt(0),n);
-			for (Node child : n.children) {
-				hashify(child);
+		} else if(n.parent !=null && n != null){		
+			if (n.label != null) {
+				hashInsert(n.parent, n.label.charAt(0), n);
+				for (Node child : n.children) {
+					hashify(child);
+				}
 			}
 		}
 
@@ -64,17 +69,16 @@ public class HashTrie extends ListTrie {
 			search(child,s);
 		}else{
 			int diff = diffIndex(n.label,s);
+			
 			Node child = findChild(n,s.charAt(diff));
+			diff = diffIndex(child.label, s.substring(diff));
 			search(child,s.substring(diff));
 
 		}
-			
-		
-		
-		
+
 		return false;
 	}
-
+	
 	public Node findChild(Node parent, char c) {
 		int i = hash(parent, c);
 		HashNode p = table[i];
@@ -88,21 +92,21 @@ public class HashTrie extends ListTrie {
 		return r;
 	}
 
-	public static void main(String[] args) {
-
-		HashTrie ht = new HashTrie(20);
-		ht.insertString("cats");
-		ht.insertString("cap");
-		ht.insertString("crabs");
-		ht.insertString("poop");
-		ht.insertString("kelseysmells");
-		ht.insertString("likepoop");
-		ht.insertString("pot");
-		ht.insertString("alexisthepoop");
-		ht.hashify(ht.root);
-		System.out.println("");
-		ht.search(ht.root,"cap");
-
-	}
+//	public static void main(String[] args) {
+//
+//		HashTrie ht = new HashTrie(20);
+//		ht.insertString("cats");
+//		ht.insertString("cap");
+//		ht.insertString("crabs");
+//		ht.insertString("poop");
+//		ht.insertString("kelseysmells");
+//		ht.insertString("likepoop");
+//		ht.insertString("pot");
+//		ht.insertString("alexisthepoop");
+//		ht.hashify(ht.root);
+//		System.out.println("");
+//		ht.search(ht.root,"cap");
+//
+//	}
 
 }

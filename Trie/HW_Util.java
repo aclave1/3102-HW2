@@ -14,14 +14,19 @@ public class HW_Util {
 		ListTrie lt = new ListTrie();
 
 		util.loadfile(args[0]);
-		
+		HashTrie ht = new HashTrie(util.input.size());
 		int lines = 0;
 		for (String s : util.input) {
-			System.out.println(lines);
+			//System.out.println(lines);
 			lt.insertString(s);
+			ht.insertString(s);
 			lines++;
 		}
-		//System.out.println(lt.searchTrie(lt.root, "applegi"));
+		//ht.hashify(ht.root);
+		//System.out.println(ht.search(ht.root, "apple"));
+		
+		System.out.println(lt.search(lt.root,"abductee"));
+		
 		System.out.printf("\n%d words added",lines);
 
 	}

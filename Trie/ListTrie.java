@@ -20,29 +20,40 @@ public class ListTrie {
 	 *         child if it does.
 	 */
 	public Node lSearch(Node node, String key) {
+		int bestdiff = 0;
+		Node bestchild = new Node();
 		for (Node child : node.children) {
 			int diff = diffIndex(child.label, key);
-			if (diff != 0) {
-				return child;
+			if (diff > bestdiff) {
+				bestdiff = diff;
+				bestchild = child;
 			}
 		}
-		return null;
+		if (diffIndex(bestchild.label, key) != 0) {
+			return bestchild;
+		} else
+			return null;
 	}
 
 	public boolean search(Node n, String s) {
 		boolean retval = false;
-		if (n.label == null) {
+		if (n.label == "$") {
 			Node candidate = lSearch(n, s);
 			retval = search(candidate, s);
 		} else {
 			int diff = diffIndex(n.label, s);
-			if (diff > n.label.length() || diff > s.length()) {
+			if (diff > n.label.length() || diff > s.length()
+					|| diff < n.label.length()) {
 				retval = false;
 			} else if (diff == n.label.length() && diff == s.length()) {
 				retval = true;
 			} else if (diff == n.label.length() && diff < s.length()) {
 				Node candidate = lSearch(n, s.substring(diff));
-				retval = search(candidate, s.substring(diff));
+				if (candidate != null) {
+					retval = search(candidate, s.substring(diff));
+				} else {
+					return false;
+				}
 			}
 
 		}
@@ -54,8 +65,6 @@ public class ListTrie {
 		insertString(s, root);
 	}
 
-	// call this to insert a string onto a node
-	// the algorithm is upside down.
 	public void insertString(String s, Node n) {
 		int diff;
 		if (n.label == "$") {
@@ -74,20 +83,27 @@ public class ListTrie {
 				Node child = new Node(s);
 				child.parent = n;
 				n.children.add(child);
+				// child.children.add(new Node("$"));
 			}
 		}
 		// the label is a prefix to the inserted string
 		else if (diff == n.label.length()) {
-			for (Node child : n.children) {
-				int childdiff = diffIndex(child.label, s.substring(diff));
-				if (childdiff > 0) {// they share a prefix
-					insertString(s.substring(diff), child);
-					return;
-				}
+			Node candidate = lSearch(n, s.substring(diff));
+			if (candidate != null) {
+				insertString(s.substring(diff), candidate);
 			}
-			Node child = new Node(s.substring(diff));
-			child.parent = n;
-			n.children.add(child);
+			// for (Node child : n.children) {
+			// int childdiff = diffIndex(child.label, s.substring(diff));
+			// if (childdiff > 0) {// they share a prefix
+			// insertString(s.substring(diff), child);
+			// return;
+			// }
+			// }
+			else {
+				Node child = new Node(s.substring(diff)); //needs to be diff -1 sometimes
+				child.parent = n;
+				n.children.add(child);
+			}
 		}
 		// they share a prefix but they differ before the end of the label.
 		else if (diff > 0 && diff < n.label.length()) {
@@ -99,9 +115,9 @@ public class ListTrie {
 			n.children = new LinkedList<Node>();
 			n.children.add(child);
 			if (diff < s.length()) {
-				insertString(s.substring(diff), n);
+				n.children.add(new Node(s.substring(diff)));
 			} else {
-				insertString(s.substring(diff - 1));
+				n.children.add(new Node(s.substring(diff-1)));
 			}
 		} else
 			System.out.println("Something bad happened :(");
@@ -131,11 +147,6 @@ public class ListTrie {
 		}
 		return i;
 
-	}
-
-	public boolean search() {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 }
