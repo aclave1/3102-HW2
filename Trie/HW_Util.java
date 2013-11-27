@@ -11,21 +11,36 @@ public class HW_Util {
 	public static void main(String[] args) {
 		// SUPPLY A FILEPATH TO THE INPUT ON THE COMMAND LINE!!!!!
 		HW_Util util = new HW_Util();
-		ListTrie lt = new ListTrie();
-
 		util.loadfile(args[0]);
+		ListTrie lt = new ListTrie();
 		HashTrie ht = new HashTrie(util.input.size());
 		int lines = 0;
 		for (String s : util.input) {
-			//System.out.println(lines);
 			lt.insertString(s);
 			ht.insertString(s);
 			lines++;
 		}
 		ht.hashify(ht.root);
-		System.out.println(ht.search(ht.root, "apple"));
 		
-		System.out.println(lt.search(lt.root,"apple"));
+		
+		HashTrie test = new HashTrie(20);
+		test.insertString("cat");
+		test.insertString("cap");
+		test.insertString("dog");
+		test.insertString("chips");
+		test.insertString("clips");
+		test.insertString("horsey");
+		test.hashify(test.root);
+		System.out.println(test.search(test.root, "cat"));
+
+		
+		
+		System.out.println(ht.search(ht.root, "cat"));
+		for (String s : util.input) {
+			if (lt.search(lt.root, s) == false) {
+				System.out.println(s + " returned false.");
+			}
+		}
 		
 		System.out.printf("\n%d words added",lines);
 

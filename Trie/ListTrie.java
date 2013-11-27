@@ -45,7 +45,7 @@ public class ListTrie {
 			int diff = diffIndex(n.label, s);
 			if (diff > n.label.length() || diff > s.length()|| diff < n.label.length()) {
 				retval = false;
-			} else if (diff == n.label.length() && diff == s.length()) {
+			} else if (diff == n.label.length() && diff == s.length() && n.isWord == true) {
 				
 				retval = true;
 			} else if (diff == n.label.length() && diff < s.length()) {
@@ -109,15 +109,18 @@ public class ListTrie {
 			child.children = n.children;
 			n.children = new LinkedList<Node>();
 			n.children.add(child);
+			child.isWord = true;
 			if (diff < s.length()) {
 				Node word = new Node(s.substring(diff));
 				word.isWord = true;
 				n.children.add(word);
+				word.parent = n;
 				
 			} else {
 				Node word = new Node(s.substring(diff));
 				word.isWord = true;
 				n.children.add(word);
+				word.parent = n;
 			}
 		} else
 			System.out.println("Something bad happened :(");

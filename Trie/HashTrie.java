@@ -11,35 +11,29 @@ public class HashTrie extends ListTrie {
 		Node parent;
 		Node child;
 		HashNode next;
-
+		int hashval;
 		HashNode(Node p, char c, Node q) {
 			parent = p;
 			this.c = c;
 			child = q;
 		}
-		@Override 
-		public String toString(){
+
+		@Override
+		public String toString() {
 			StringBuilder sb = new StringBuilder();
-			
-			
-			sb.append("par:" + parent.label.toString() + " c:"+c +" child " +child.label.toString());
-			
-			
-			
+			sb.append("par:" + parent.label.toString() + " c:" + c + " child "
+					+ child.label.toString());
 			return sb.toString();
 		}
-
 	}
 
 	public int hash(Node parent, char c) {
-		int a = table.length/3;
-		int i = (int) parent.label.charAt(0);
-		int j = (int)c;		
-		return ((a * i +j) % table.length);
+		return (Math.abs(parent.hashCode() * (int) c) % table.length);
 	}
 
-	public void hashInsert(Node p, char c,Node q) {
+	public void hashInsert(Node p, char c, Node q) {
 		int i = hash(p, c);
+		System.out.println(p.label + c + " " + i);
 		HashNode x = table[i];
 		HashNode y = new HashNode(p, c, q);
 		y.next = x;
@@ -53,41 +47,17 @@ public class HashTrie extends ListTrie {
 			for (Node child : n.children) {
 				hashify(child);
 			}
-		} else if(n.parent !=null && n != null){		
+		} else if (n.parent != n && n != null) {
 			if (n.label != null) {
 				hashInsert(n.parent, n.label.charAt(0), n);
 				for (Node child : n.children) {
+					hashInsert(n,child.label.charAt(0),child);
 					hashify(child);
 				}
 			}
 		}
-
 	}
-	public boolean search(Node n,String s) {
-		boolean retval = false;
-		if(n.parent == n){
-			Node child = findChild(n,s.charAt(0));
-			retval = search(child,s);
-		}else{
-			int diff = diffIndex(n.label,s);
-			if (diff > n.label.length() || diff > s.length()|| diff < n.label.length()) {
-				retval = false;
-			} else if (diff == n.label.length() && diff == s.length()) {
-				retval = true;
-			} else if (diff == n.label.length() && diff < s.length()) {
-				Node child = findChild(n,s.charAt(diff));
-				if(child != null){
-					diff = diffIndex(child.label, s.substring(diff));
-					retval = search(child,s.substring(diff));
-				} else{
-					return false;
-				}
-			}
 
-		}
-		return retval;
-	}
-	
 	public Node findChild(Node parent, char c) {
 		int i = hash(parent, c);
 		HashNode p = table[i];
@@ -101,21 +71,33 @@ public class HashTrie extends ListTrie {
 		return r;
 	}
 
-//	public static void main(String[] args) {
-//
-//		HashTrie ht = new HashTrie(20);
-//		ht.insertString("cats");
-//		ht.insertString("cap");
-//		ht.insertString("crabs");
-//		ht.insertString("poop");
-//		ht.insertString("kelseysmells");
-//		ht.insertString("likepoop");
-//		ht.insertString("pot");
-//		ht.insertString("alexisthepoop");
-//		ht.hashify(ht.root);
-//		System.out.println("");
-//		ht.search(ht.root,"cap");
-//
-//	}
+	public boolean search(Node n, String s) {
+		boolean retval = false;
+		if (n.parent == n) {
+			Node child = findChild(n, s.charAt(0));// @TODO check if child is
 
+			if (child != null) {
+				retval = search(child, s);
+			} else
+				return false;
+		} else {
+			System.out.println(n.label.charAt(0));// debug
+			int diff = diffIndex(n.label, s);
+			if (diff > n.label.length() || diff > s.length()|| diff < n.label.length()) {
+				retval = false;
+			} else if (diff == n.label.length() && diff == s.length()) {
+				retval = true;
+			} else if (diff == n.label.length() && diff < s.length()) {
+				Node child = findChild(n, s.charAt(diff));
+				if (child != null) {
+					diff = diffIndex(child.label, s.substring(diff));
+					retval = search(child, s.substring(diff));
+				} else {
+					return false;
+				}
+			}
+
+		}
+		return retval;
+	}
 }
