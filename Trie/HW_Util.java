@@ -4,11 +4,12 @@ Description: Creates a K-ary heap where K is the maximum number of children for 
  */
 import java.util.*;
 import java.io.*;
-
+import java.lang.reflect.Field;
+import java.util.Random;
 public class HW_Util {
 	List<String> input;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		// SUPPLY A FILEPATH TO THE INPUT ON THE COMMAND LINE!!!!!
 		HW_Util util = new HW_Util();
 		util.loadfile(args[0]);
@@ -20,32 +21,40 @@ public class HW_Util {
 			ht.insertString(s);
 			lines++;
 		}
-		ht.hashify(ht.root);
-		
-		
-		HashTrie test = new HashTrie(20);
-		test.insertString("cat");
-		test.insertString("cap");
-		test.insertString("dog");
-		test.insertString("chips");
-		test.insertString("clips");
-		test.insertString("horsey");
-		test.hashify(test.root);
-		System.out.println(test.search(test.root, "cat"));
+		ht.hashify(ht.root);		
+		System.out.printf("\n%d words added\n\n",lines);
 
-		
-		
-		System.out.println(ht.search(ht.root, "cat"));
-		for (String s : util.input) {
-			if (lt.search(lt.root, s) == false) {
-				System.out.println(s + " returned false.");
-			}
+		//fill our array with random numers, we'll use this to select random words out of input file
+		Random rand = new Random();
+		int[] randoms = new int[1000];
+		for(int i = 0;i<randoms.length;i++){
+			randoms[i] = Math.abs(rand.nextInt() % util.input.size()-1);
 		}
+		//we'll run 1000 queries on both with the same array to ensure the same input
+		System.out.println("Performing 1000 queries on the HashTrie...");
+		double start = System.nanoTime();
+		for(int i = 0;i<randoms.length;i++){
+			ht.search(ht.root, util.input.get(randoms[i]));
+		}
+		double end = System.nanoTime();
+		double HashTrieTime = (end - start)/1000000;
+		System.out.printf("1000 queries performed in: %f milliseconds.\n\n",HashTrieTime);
 		
-		System.out.printf("\n%d words added",lines);
+		System.out.print("Performing 1000 queries on the ListTrie...\n");
+		start = System.nanoTime();
+		for(int i = 0;i<randoms.length;i++){
+			lt.search(lt.root, util.input.get(randoms[i]));
+		}
+		end = System.nanoTime();
+		double ListTrieTime= (end - start)/1000000;
+		System.out.printf("1000 queries performed in: %f milliseconds.\n\n",ListTrieTime);
+		
+		double ratio = ListTrieTime/HashTrieTime ;
+		System.out.printf("HashTrie was %.4f times faster than ListTrie\n",ratio);
+		
+		
 
 	}
-
 	public boolean loadfile(String path) {
 		input = new ArrayList<String>();
 		Scanner filescn;

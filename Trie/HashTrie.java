@@ -1,3 +1,6 @@
+import java.util.LinkedList;
+import java.util.List;
+
 public class HashTrie extends ListTrie {
 	HashNode[] table;
 
@@ -12,6 +15,7 @@ public class HashTrie extends ListTrie {
 		Node child;
 		HashNode next;
 		int hashval;
+
 		HashNode(Node p, char c, Node q) {
 			parent = p;
 			this.c = c;
@@ -28,12 +32,11 @@ public class HashTrie extends ListTrie {
 	}
 
 	public int hash(Node parent, char c) {
-		return (Math.abs(parent.hashCode() * (int) c) % table.length);
+		return (Math.abs(parent.hashCode() * (int) parent.label.charAt(0)* (int) c) % table.length);
 	}
 
 	public void hashInsert(Node p, char c, Node q) {
 		int i = hash(p, c);
-		System.out.println(p.label + c + " " + i);
 		HashNode x = table[i];
 		HashNode y = new HashNode(p, c, q);
 		y.next = x;
@@ -42,6 +45,7 @@ public class HashTrie extends ListTrie {
 
 	// like heapify for a Node
 	public void hashify(Node n) {
+		if(n==null){return;}
 		if (n.parent == n && n != null) {
 			hashInsert(n, n.label.charAt(0), n);
 			for (Node child : n.children) {
@@ -51,7 +55,7 @@ public class HashTrie extends ListTrie {
 			if (n.label != null) {
 				hashInsert(n.parent, n.label.charAt(0), n);
 				for (Node child : n.children) {
-					hashInsert(n,child.label.charAt(0),child);
+					hashInsert(n, child.label.charAt(0), child);
 					hashify(child);
 				}
 			}
@@ -64,36 +68,36 @@ public class HashTrie extends ListTrie {
 		Node r = null;
 		while (p != null) {
 			if (p.parent == parent && p.c == c) {
-				r = p.child;
+				return p.child;
 			}
 			p = p.next;
 		}
+
 		return r;
 	}
 
 	public boolean search(Node n, String s) {
 		boolean retval = false;
 		if (n.parent == n) {
-			Node child = findChild(n, s.charAt(0));// @TODO check if child is
-
+			Node child = findChild(n, s.charAt(0));
 			if (child != null) {
 				retval = search(child, s);
 			} else
-				return false;
+				retval = false;
 		} else {
-			System.out.println(n.label.charAt(0));// debug
 			int diff = diffIndex(n.label, s);
-			if (diff > n.label.length() || diff > s.length()|| diff < n.label.length()) {
+			if (diff > n.label.length() 
+					|| diff > s.length()
+					||diff < n.label.length()) {
 				retval = false;
 			} else if (diff == n.label.length() && diff == s.length()) {
 				retval = true;
 			} else if (diff == n.label.length() && diff < s.length()) {
 				Node child = findChild(n, s.charAt(diff));
 				if (child != null) {
-					diff = diffIndex(child.label, s.substring(diff));
 					retval = search(child, s.substring(diff));
 				} else {
-					return false;
+					retval = false;
 				}
 			}
 

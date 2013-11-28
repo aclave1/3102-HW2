@@ -3,7 +3,6 @@ import java.util.List;
 
 public class ListTrie {
 	Node root;
-	
 
 	public ListTrie() {
 		root = new Node();
@@ -43,10 +42,11 @@ public class ListTrie {
 			retval = search(candidate, s);
 		} else {
 			int diff = diffIndex(n.label, s);
-			if (diff > n.label.length() || diff > s.length()|| diff < n.label.length()) {
+			if (diff > n.label.length() || diff > s.length()
+					|| diff < n.label.length()) {
 				retval = false;
-			} else if (diff == n.label.length() && diff == s.length() && n.isWord == true) {
-				
+			} else if (diff == n.label.length() && diff == s.length()
+					&& n.isWord == true) {
 				retval = true;
 			} else if (diff == n.label.length() && diff < s.length()) {
 				Node candidate = lSearch(n, s.substring(diff));
@@ -92,9 +92,9 @@ public class ListTrie {
 			Node candidate = lSearch(n, s.substring(diff));
 			if (candidate != null) {
 				insertString(s.substring(diff), candidate);
-			}
-			else {
-				Node child = new Node(s.substring(diff)); //needs to be diff -1 sometimes
+			} else {
+				Node child = new Node(s.substring(diff)); // needs to be diff -1
+															// sometimes
 				child.parent = n;
 				n.children.add(child);
 				child.isWord = true;
@@ -115,7 +115,7 @@ public class ListTrie {
 				word.isWord = true;
 				n.children.add(word);
 				word.parent = n;
-				
+
 			} else {
 				Node word = new Node(s.substring(diff));
 				word.isWord = true;
