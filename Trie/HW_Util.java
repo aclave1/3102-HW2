@@ -4,7 +4,6 @@ Description: Creates a K-ary heap where K is the maximum number of children for 
  */
 import java.util.*;
 import java.io.*;
-import java.lang.reflect.Field;
 import java.util.Random;
 public class HW_Util {
 	List<String> input;
@@ -63,6 +62,7 @@ for(String s : util.input){ ht.insertString(s);
 		
 
 	}
+	
 	public boolean loadfile(String path) {
 		input = new ArrayList<String>();
 		Scanner filescn;

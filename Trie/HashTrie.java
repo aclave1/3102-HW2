@@ -1,5 +1,4 @@
-import java.util.LinkedList;
-import java.util.List;
+
 
 public class HashTrie extends ListTrie {
 	HashNode[] table;
