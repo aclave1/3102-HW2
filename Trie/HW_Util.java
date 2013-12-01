@@ -1,5 +1,5 @@
 /**
-        @authors: Alex Clavelle, Kelsey Cameron
+	@authors: Alex Clavelle, Kelsey Cameron
 Description: Creates a K-ary heap where K is the maximum number of children for a non-leaf node.
  */
 import java.util.*;
@@ -16,12 +16,20 @@ public class HW_Util {
 		ListTrie lt = new ListTrie();
 		HashTrie ht = new HashTrie(util.input.size());
 		int lines = 0;
+		
+		long beforelist = Runtime.getRuntime().freeMemory();
+		System.out.println(beforelist +" bytes before building list");
 		for (String s : util.input) {
 			lt.insertString(s);
-			ht.insertString(s);
 			lines++;
 		}
+		long afterlist = Runtime.getRuntime().freeMemory();
+		System.out.println(afterlist-beforelist + "bytes used by ListTrie");
+for(String s : util.input){ ht.insertString(s);
+		}
 		ht.hashify(ht.root);		
+		long afterhash = Runtime.getRuntime().freeMemory();
+		System.out.println(afterhash - afterlist+" bytes used by hashtrie");
 		System.out.printf("\n%d words added\n\n",lines);
 
 		//fill our array with random numers, we'll use this to select random words out of input file
