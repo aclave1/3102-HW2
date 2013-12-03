@@ -16,11 +16,12 @@ public class Graph_Util {
 		List<String[]> ops = util.makeOps(util.input);
 		
 		String[] attr = ops.get(0);
-		Graph g = new Graph(Integer.parseInt(attr[0]),Integer.parseInt(attr[1]));
+		Graph g = new Graph(Integer.parseInt(attr[0]));
 		for(int i=1;i<ops.size();i++){
-			
+			String[] in = ops.get(i);
+			g.addEdge(Integer.parseInt(in[0]), Integer.parseInt(in[1]), Integer.parseInt(in[2]));
 		}
-		
+		System.out.println("built");
 		
 		
 		

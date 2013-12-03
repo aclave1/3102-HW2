@@ -11,4 +11,8 @@ public class Node {
 	public Node(Node p){
 		parent = p;
 	}
+	@Override
+	public String toString(){
+		return ""+vertexId;
+	}
 }

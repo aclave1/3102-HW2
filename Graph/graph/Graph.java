@@ -1,22 +1,28 @@
 package graph;
+import java.util.List;
+import java.util.LinkedList;
 
 public class Graph {
 	Node[] vtable;
-	Edge[] etable;
+	List<Edge> eList;
 	int verts;
 	int edges;
 	
-	public Graph(int v, int e){
+	public Graph(int v){
 		verts = v;
-		edges = e;
 		vtable = new Node[v];
-		etable = new Edge[e];
+		eList = new LinkedList<Edge>();
+		for(int i=0;i<v;i++){
+			vtable[i] = new Node(i);
+		}
 	}
 	public Graph(){
 	}
 	//connect two verts via an edge
-	public void connect(int v,int u){
-		Edge e = new Edge();
+	public void addEdge(int v,int u,int w){
+		Edge e = new Edge(vtable[v],vtable[u],w);
+		eList.add(e);
+		edges++;
 	}
 	
 	public void makeSet(int v) {
