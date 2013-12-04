@@ -42,7 +42,6 @@ public class Graph {
 		NodeList q = find(v);
 		if (p.size < q.size) {
 			NodeList r = p;
-			;
 			p = q;
 			q = r;
 		}

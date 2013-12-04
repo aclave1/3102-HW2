@@ -5,6 +5,7 @@ import java.util.List;
 
 public class EdgeList {
 	List<Edge> edges;
+	int weight;
 
 	public EdgeList() {
 		edges = new ArrayList<Edge>();
@@ -16,6 +17,7 @@ public class EdgeList {
 
 	public void add(Edge e) {
 		edges.add(e);
+		weight += e.weight;
 	}
 
 	public String toString() {
