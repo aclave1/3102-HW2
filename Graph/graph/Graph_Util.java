@@ -14,16 +14,20 @@ public class Graph_Util {
 		Graph_Util util = new Graph_Util();
 		util.loadfile(args[0]);
 		List<String[]> ops = util.makeOps(util.input);
-		
+
 		String[] attr = ops.get(0);
 		Graph g = new Graph(Integer.parseInt(attr[0]),Integer.parseInt(attr[1]));
 		for(int i=1;i<ops.size();i++){
-			
-		}	
+			String[] op = ops.get(i);
+			g.connect(Integer.parseInt(op[0]), Integer.parseInt(op[1]), Integer.parseInt(op[2]));
+		}
+		EdgeList e = g.kruskal_mst(g.etable, g.verts, g.edges);
+		System.out.println("Minimum spanning tree of: \n"+g.etable );
+		System.out.println(e);
 	}
 
-	
-	
+
+
 	public boolean loadfile(String path) {
 		input = new ArrayList<String>();
 		Scanner filescn;
@@ -45,8 +49,8 @@ public class Graph_Util {
 		} else
 			System.out.println("File load unsuccessfull. ");
 			return false;
-	}	
-	
+	}
+
 	public List<String[]> makeOps(List<String> s){
 		List<String[]> ops = new ArrayList<String[]>();
 		for(int i = 0;i<s.size();i++){

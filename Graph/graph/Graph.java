@@ -13,6 +13,9 @@ public class Graph {
 		verts = v;
 		edges = e;
 		vlist = new Node[v];
+		for(int i=0;i<v;i++){
+			vlist[i] = new Node(i);
+		}
 		etable = new EdgeList();
 	}
 	public Graph(){
@@ -72,8 +75,8 @@ public class Graph {
 			makeSet(i);
 		}
 		for(int i=0;i<numedges;i++){
-			Node u = e.edges.get(i).from;
-			Node v = e.edges.get(i).to;
+			Node u = e.get(i).from;
+			Node v = e.get(i).to;
 			if(find(u) != find(v)){
 				union(u,v);
 				t.add(e.get(i));

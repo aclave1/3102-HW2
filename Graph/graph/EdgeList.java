@@ -14,5 +14,13 @@ public class EdgeList {
 	public void add(Edge e){
 		edges.add(e);
 	}
+	public String toString(){
+		StringBuilder sb = new StringBuilder("{");
+		for(Edge e : edges){
+			sb.append("{"+e.from.vertexId + " " + e.to.vertexId + " " + e.weight+"}");
+		}
+		sb.append("}");
+		return sb.toString();
+	}
 
 }
