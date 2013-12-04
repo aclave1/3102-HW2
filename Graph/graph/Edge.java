@@ -1,19 +1,25 @@
 package graph;
 
-public class Edge {
+public class Edge implements Comparable<Edge> {
+	Node to;
+	Node from;
+	int weight;
 
-	Node t;
-	Node f;
-	int w;
-	public Edge(Node to,Node from,int weight){
-		t=to;
-		f=from;
-		w=weight;
+	public Edge(Node t, Node f, int w) {
+		to = t;
+		from = f;
+		weight = w;
 	}
-	public Edge(){
-	}
+
 	@Override
-	public String toString(){
-		return "{"+t+", "+f+"} "+w;
+	public int compareTo(Edge e) {
+		if (weight > e.weight) {
+			return 1;
+		} else if (weight < e.weight) {
+			return -1;
+		} else
+			return 0;
 	}
+
+
 }
