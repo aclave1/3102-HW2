@@ -4,5 +4,5 @@ public class NodeList {
 	Node head;
 	Node tail;
 	int size;
-	
+
 }
