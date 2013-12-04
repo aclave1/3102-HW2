@@ -21,10 +21,16 @@ public class Graph_Util {
 		 * 1 3 4
 		 */
 		Graph_Util util = new Graph_Util();
-		util.loadfile(args[0]);
-		List<String[]> ops = util.makeOps(util.input);
+		List<String[]> ops;
+		if(args.length != 0){ util.loadfile(args[0]); ops=util.makeOps(util.input);}
+		else{System.out.println("Creating an input file since none was specified:.....");List<String> inp = LargeInputGenerator.opGen(1000, 1000, 100);ops = util.makeOps(inp);}
 
 		String[] attr = ops.get(0);
+		System.out.println(attr[0] + " verts, " + attr[1] + " edges \n");
+
+
+
+
 		Graph g = new Graph(Integer.parseInt(attr[0]),
 				Integer.parseInt(attr[1]));
 		for (int i = 1; i < ops.size(); i++) {
@@ -35,10 +41,10 @@ public class Graph_Util {
 		long starttime = System.nanoTime();
 		EdgeList e = g.kruskal_mst(g.etable, g.verts, g.edges);
 		long endtime = System.nanoTime();
-		double elapsed =  (endtime - starttime)/1000000.0;
+		double elapsed1 =  (endtime - starttime)/1000000.0;
 		System.out.println("Set: \n" + g.etable + " weight: " + g.etable.weight);
 		System.out.println("Minimum spanning tree of set:\n"+e + " weight: " + e.weight);
-		System.out.printf("Kruskal's algorithm took %.6f milliseconds for the Linked List with leader-pointer at every node\n\n",elapsed );
+		System.out.printf("Kruskal's algorithm took %.6f milliseconds for the Linked List with leader-pointer at every node\n\n",elapsed1 );
 
 
 		RootedGraph rg = new RootedGraph(Integer.parseInt(attr[0]),Integer.parseInt(attr[1]));
@@ -50,12 +56,12 @@ public class Graph_Util {
 		starttime = System.nanoTime();
 		EdgeList e2 = rg.kruskal_mst(rg.etable, rg.verts, rg.edges);
 		endtime = System.nanoTime();
-		elapsed = (endtime - starttime)/1000000.0;
+		double elapsed2 = (endtime - starttime)/1000000.0;
 
 		System.out.println("Set: \n" + rg.etable + " weight: " + rg.etable.weight);
 		System.out.println("Minimum spanning tree of set:\n"+e2 + " weight: " + e2.weight);
-		System.out.printf("Kruskal's algorithm took %.6f milliseconds for rooted trees with path compression.\n\n",elapsed );
-
+		System.out.printf("Kruskal's algorithm took %.6f milliseconds for rooted trees with path compression.\n\n",elapsed2 );
+		System.out.printf("\nPath compression was %.4f times faster than Linked-lists with Lead pointing",(elapsed1/elapsed2));
 	}
 
 	public boolean loadfile(String path) {
