@@ -44,7 +44,7 @@ public class Graph_Util {
 			System.out.println(e);
 		}
 		if (input.size() == count) {
-			System.out.println("File successfully loaded " + count );
+			System.out.printf("File successfully loaded: %d lines\n\n",count);
 			return true;
 		} else
 			System.out.println("File load unsuccessfull. ");
